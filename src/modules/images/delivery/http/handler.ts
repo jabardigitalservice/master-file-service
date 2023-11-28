@@ -28,11 +28,13 @@ class Handler {
                 })
 
                 const result = data.map(({ title, filename }) => {
+                    const path = 'logos/' + filename
                     return {
                         title,
-                        url: GetFileUrl(this.config.file.url, filename, [
-                            'logos',
-                        ]),
+                        file: {
+                            path: path,
+                            uri: GetFileUrl(this.config.file.url, path),
+                        },
                     }
                 })
 
