@@ -27,18 +27,7 @@ class Handler {
                     ),
                 })
 
-                const result = data.map(({ title, filename }) => {
-                    const path = 'logos/' + filename
-                    return {
-                        title,
-                        file: {
-                            path: path,
-                            uri: GetFileUrl(this.config.file.url, path),
-                        },
-                    }
-                })
-
-                return res.json({ data: result, meta: GetMeta(request, count) })
+                return res.json({ data, meta: GetMeta(request, count) })
             } catch (error) {
                 return next(error)
             }

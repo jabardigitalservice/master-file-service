@@ -20,20 +20,12 @@ class Mongo {
             })
     }
 
-    public static ModelWithSwitchDb(
-        database: string,
-        collection: string,
-        schema: Schema
-    ) {
-        return mongoose.connection
-            .useDb(database, {
-                useCache: true,
-            })
-            .model(collection, schema)
+    public static Model(collection: string, schema: Schema) {
+        return mongoose.model(collection, schema, collection)
     }
 
-    public static Model(collection: string, schema: Schema) {
-        return mongoose.model(collection, schema)
+    public static Disconnect() {
+        return mongoose.disconnect()
     }
 }
 

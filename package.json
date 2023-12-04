@@ -10,6 +10,7 @@
         "lint": "npx prettier --check ./src",
         "lint:fix": "npx prettier --write ./src",
         "cron:run": "node build/src/cron/$npm_config_name.cron",
+        "seed:run": "node build/src/database/seeds/$npm_config_name.seed",
         "test": "npx jest"
     },
     "keywords": [
@@ -49,6 +50,7 @@
         "joi": "^17.7.0",
         "jsonwebtoken": "^9.0.0",
         "luxon": "^3.3.0",
+        "mime-types": "^2.1.35",
         "mongoose": "^6.8.3",
         "redis": "^4.5.1",
         "winston": "^3.8.2"
