@@ -37,30 +37,25 @@ jobs:
           push: true
           tags: ${{ secrets.SERVICE_IMAGENAME }}:${{ env.sha_short }}
 
-      # # GitOps
-      # - name: GitOps ArgoCD Setup
-      #   run: |
-      #     echo "${{ secrets.GITLAB_ARGOCD_KEY }}" > /tmp/gitlab-deploy-ssh-key
-      #     chmod 600 /tmp/gitlab-deploy-ssh-key
-      #     export GIT_SSH_COMMAND="ssh -i /tmp/gitlab-deploy-ssh-key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-      #     git clone ${{ secrets.GITLAB_ARGOCD_REPOSITORY }}
+      # GitOps
+      - name: GitOps ArgoCD Setup
+        run: |
+          echo "${{ secrets.GITLAB_ARGOCD_KEY }}" > /tmp/gitlab-deploy-ssh-key
+          chmod 600 /tmp/gitlab-deploy-ssh-key
+          export GIT_SSH_COMMAND="ssh -i /tmp/gitlab-deploy-ssh-key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+          git clone ${{ secrets.GITLAB_ARGOCD_REPOSITORY }}
 
-      # - name: GitOps ArgoCD Update Image Tag J-Site Service Staging
-      #   uses: mikefarah/yq@master
-      #   with:
-      #     cmd: yq -i '.spec.template.spec.containers[0].image = "${{ secrets.SERVICE_IMAGENAME }}:${{ env.sha_short }}"' 'jds-terraform-gke/k8s/j-site/development/j-site-app/deployment.yaml'
+      - name: GitOps ArgoCD Update Image Tag Master File Service Staging
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq -i '.spec.template.spec.containers[0].image = "${{ secrets.SERVICE_IMAGENAME }}:${{ env.sha_short }}"' 'jds-terraform-gke/k8s/digiteam-assets/deployment.yaml'
 
-      # - name: GitOps ArgoCD Update Image Tag J-Site Cron Agendas
-      #   uses: mikefarah/yq@master
-      #   with:
-      #     cmd: yq -i '.spec.jobTemplate.spec.template.spec.containers[0].image = "${{ secrets.SERVICE_IMAGENAME }}:${{ env.sha_short }}"' 'jds-terraform-gke/k8s/j-site/development/j-site-app/cronjob-agendas.yaml'
-
-      # - name: GitOps ArgoCD Create Branch, Commit, Push
-      #   run: |
-      #     export GIT_SSH_COMMAND="ssh -i /tmp/gitlab-deploy-ssh-key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-      #     cd jds-terraform-gke/k8s/j-site/development/j-site-app
-      #     git config user.email "github-action@github.com"
-      #     git config user.name "Github Action"
-      #     git add .
-      #     git commit -m "j-site Sync Staging"
-      #     git push origin master
+      - name: GitOps ArgoCD Create Branch, Commit, Push
+        run: |
+          export GIT_SSH_COMMAND="ssh -i /tmp/gitlab-deploy-ssh-key -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+          cd jds-terraform-gke/k8s/digiteam-assets
+          git config user.email "github-action@github.com"
+          git config user.name "Github Action"
+          git add .
+          git commit -m "Master File Sync Staging"
+          git push origin master
