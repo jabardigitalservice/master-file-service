@@ -24,7 +24,7 @@ const run = async () => {
                 mimetype: 'image/svg+xml',
                 originalname: filename,
                 filename,
-                uri: GetFileUrl(config.file.url, path),
+                uri: GetFileUrl(config.file.uri, path),
             },
             category,
             tags: [title, category],

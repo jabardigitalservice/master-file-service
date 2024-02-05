@@ -6,6 +6,7 @@ export interface Config {
             http: number
         }
         log: string
+        secret: string
     }
     db: {
         host: string
@@ -25,6 +26,14 @@ export interface Config {
         ttl: number
     }
     file: {
-        url: string
+        max: number
+        type: string[]
+        uri: string
+    }
+    aws: {
+        access_key_id: string
+        secret_access_key: string
+        bucket: string
+        region: string
     }
 }
