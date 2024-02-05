@@ -4,6 +4,7 @@ import { Config } from '../../../config/config.interface'
 import Jwt from '../../../pkg/jwt'
 import error from '../../../pkg/error'
 import statusCode from '../../../pkg/statusCode'
+import { Translate } from '../../../helpers/translate'
 
 class Usecase {
     constructor(
@@ -16,7 +17,7 @@ class Usecase {
         if (body.password !== this.config.app.secret)
             throw new error(
                 statusCode.UNAUTHORIZED,
-                statusCode[statusCode.UNAUTHORIZED]
+                Translate('login_failed', {})
             )
 
         const access_token = this.jwt.Sign({ app: this.config.app.name })
