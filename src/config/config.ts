@@ -14,6 +14,7 @@ const config: Config = {
             http: env.APP_PORT_HTTP,
         },
         log: env.APP_LOG,
+        secret: env.APP_SECRET,
     },
     db: {
         host: env.DB_HOST,
@@ -33,7 +34,15 @@ const config: Config = {
         ttl: env.REDIS_TTL,
     },
     file: {
-        url: env.FILE_URL,
+        max: Number(env.FILE_MAX) * 1024 * 1024, // MB
+        type: env.FILE_TYPE.split(','),
+        uri: env.FILE_URI,
+    },
+    aws: {
+        access_key_id: env.AWS_ACCESS_KEY_ID,
+        secret_access_key: env.AWS_SECRET_ACCESS_KEY,
+        bucket: env.AWS_BUCKET,
+        region: env.AWS_REGION,
     },
 }
 

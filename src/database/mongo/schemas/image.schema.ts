@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose'
 import Mongo from '../mongo'
+import config from '../../../config/config'
 
 const schema = new Schema(
     {
@@ -13,20 +14,15 @@ const schema = new Schema(
         },
         caption: {
             type: String,
-            default: null,
         },
         category: {
             type: String,
-            required: true,
         },
         title: {
             type: String,
-            required: true,
         },
         description: {
             type: String,
-            required: false,
-            default: null,
         },
         tags: {
             type: [String],
@@ -41,5 +37,10 @@ const schema = new Schema(
         versionKey: false,
     }
 )
+
+schema.pre('save', function (next) {
+    if (this.file?.path) this.file.uri = `${config.file.uri}${this.file.path}`
+    next()
+})
 
 export default Mongo.Model('images', schema)

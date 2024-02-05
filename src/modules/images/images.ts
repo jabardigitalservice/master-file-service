@@ -4,6 +4,9 @@ import Usecase from './usecase/usecase'
 import Handler from './delivery/http/handler'
 import Repository from './repository/mongo/repository'
 import { Config } from '../../config/config.interface'
+import S3 from '../../external/s3'
+import Jwt from '../../pkg/jwt'
+import { VerifyAuth } from '../../transport/http/middleware/verifyAuth'
 
 class Images {
     constructor(
@@ -11,19 +14,16 @@ class Images {
         private http: Http,
         private config: Config
     ) {
+        const s3 = new S3(config)
         const repository = new Repository(logger)
-        const usecase = new Usecase(logger, repository)
+        const usecase = new Usecase(logger, repository, s3)
         this.loadHttp(usecase)
     }
 
     private loadHttp(usecase: Usecase) {
-        const handler = new Handler(
-            this.logger,
-            this.http,
-            usecase,
-            this.config
-        )
+        const handler = new Handler(this.logger, this.http, usecase)
         this.httpPublic(handler)
+        this.httpPrivate(handler)
     }
 
     private httpPublic(handler: Handler) {
@@ -32,6 +32,21 @@ class Images {
         Router.get('/', handler.Fetch())
 
         this.http.SetRouter('/v1/public/images', Router)
+    }
+
+    private httpPrivate(handler: Handler) {
+        const Router = this.http.Router()
+
+        const auth = new Jwt(this.config.jwt.access_key)
+
+        Router.post(
+            '/',
+            VerifyAuth(auth),
+            this.http.Upload('file'),
+            handler.Store()
+        )
+
+        this.http.SetRouter('/v1/images', Router)
     }
 }
 

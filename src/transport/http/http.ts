@@ -6,10 +6,12 @@ import helmet from 'helmet'
 import compression from 'compression'
 import { Config } from '../../config/config.interface'
 import Error from '../../pkg/error'
+import multer from 'multer'
 import Logger from '../../pkg/logger'
 
 class Http {
     private app: Express
+    public dest: string = '.'
 
     constructor(private logger: Logger, private config: Config) {
         this.app = express()
@@ -23,15 +25,7 @@ class Http {
         this.app.use(bodyParser.json())
         this.app.use(helmet())
         this.app.use(compression())
-    }
-
-    private pageNotFound = () => {
-        this.app.all('*', (_: Request, res: Response) => {
-            throw new Error(
-                statusCode.NOT_FOUND,
-                statusCode[statusCode.NOT_FOUND]
-            )
-        })
+        this.app.use(express.json())
     }
 
     private onError = (
@@ -41,14 +35,13 @@ class Http {
         next: NextFunction
     ) => {
         const resp: Record<string, any> = {}
-        const code = Number(error.status) || 500
+        const code = Number(error.status) || statusCode.INTERNAL_SERVER_ERROR
         resp.error =
             error.message || statusCode[statusCode.INTERNAL_SERVER_ERROR]
 
         if (error.isObject) resp.error = JSON.parse(resp.error)
 
-        this.logger.Error(statusCode[code] as string, {
-            error,
+        this.logger.Error(error.message, {
             additional_info: this.AdditionalInfo(req, resp.code),
         })
 
@@ -67,7 +60,7 @@ class Http {
         return res.status(code).json(resp)
     }
 
-    public AdditionalInfo(req: Request, statusCode: number) {
+    public AdditionalInfo(req: any, statusCode: number) {
         return {
             env: this.config.app.env,
             http_uri: req.originalUrl,
@@ -76,8 +69,10 @@ class Http {
             http_scheme: req.protocol,
             remote_addr: req.httpVersion,
             user_agent: req.headers['user-agent'],
+            origin: req.headers['origin'] || 'unknown',
             tz: new Date(),
             code: statusCode,
+            user: req.user || {},
         }
     }
 
@@ -98,6 +93,20 @@ class Http {
                 app_name: this.config.app.name,
             })
         })
+    }
+
+    private pageNotFound = () => {
+        this.app.all('*', (_: Request, res: Response) => {
+            throw new Error(
+                statusCode.NOT_FOUND,
+                statusCode[statusCode.NOT_FOUND]
+            )
+        })
+    }
+
+    public Upload(fieldName: string) {
+        const upload = multer({ dest: this.dest })
+        return upload.single(fieldName)
     }
 
     public Run(port: number) {
