@@ -22,14 +22,15 @@ class Auth {
         this.httpPrivate(handler)
     }
 
-    private httpPublic(handler: Handler) {}
-
-    private httpPrivate(handler: Handler) {
+    private httpPublic(handler: Handler) {
         const Router = this.http.Router()
 
         Router.post('/login', handler.Login())
 
         this.http.SetRouter('/v1/auth', Router)
+    }
+
+    private httpPrivate(handler: Handler) {
     }
 }
 
