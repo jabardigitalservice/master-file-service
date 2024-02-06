@@ -20,9 +20,12 @@ class Usecase {
                 Translate('login_failed', {})
             )
 
-        const access_token = this.jwt.Sign({ app: this.config.app.name }, {
-            expiresIn: '1d'
-        })
+        const access_token = this.jwt.Sign(
+            { app: this.config.app.name },
+            {
+                expiresIn: '1d',
+            }
+        )
         return {
             access_token,
         }

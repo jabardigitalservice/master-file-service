@@ -30,8 +30,7 @@ class Auth {
         this.http.SetRouter('/v1/auth', Router)
     }
 
-    private httpPrivate(handler: Handler) {
-    }
+    private httpPrivate(handler: Handler) {}
 }
 
 export default Auth
