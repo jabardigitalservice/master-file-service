@@ -5,8 +5,6 @@ import Handler from './delivery/http/handler'
 import Repository from './repository/mongo/repository'
 import { Config } from '../../config/config.interface'
 import S3 from '../../external/s3'
-import Jwt from '../../pkg/jwt'
-import { VerifyAuth } from '../../transport/http/middleware/verifyAuth'
 
 class Images {
     constructor(
@@ -37,14 +35,7 @@ class Images {
     private httpPrivate(handler: Handler) {
         const Router = this.http.Router()
 
-        const auth = new Jwt(this.config.jwt.access_key)
-
-        Router.post(
-            '/',
-            VerifyAuth(auth),
-            this.http.Upload('file'),
-            handler.Store()
-        )
+        Router.post('/', this.http.Upload('file'), handler.Store())
 
         this.http.SetRouter('/v1/images', Router)
     }

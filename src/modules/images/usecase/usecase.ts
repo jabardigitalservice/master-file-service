@@ -20,8 +20,11 @@ class Usecase {
     }
 
     public async Store(body: Store) {
-        const newPath = CustomPathFile(getSlug(body.category), body.file)
-        body.title = body.title ?? body.file.originalname.replace(RegexExtensionImage, '')
+        const category = getSlug(body.category)
+        const newPath = CustomPathFile(category, body.file)
+        body.title =
+            body.title ??
+            body.file.originalname.replace(RegexExtensionImage, '')
         body.tags.push(body.title, body.category)
         const source = readFileSync(body.file.path)
 

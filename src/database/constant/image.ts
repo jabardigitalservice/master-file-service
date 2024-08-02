@@ -1,1 +1,1 @@
-export const categories = ['logo', 'aduan']
+export const categories = ['logo', 'sapawarga']
