@@ -1,1 +1,1 @@
-export const categories = ['logo', 'sapawarga']
+export const categories = ['logo', 'sapawarga', 'sidebar']
