@@ -6,8 +6,16 @@ import { Store } from '../../entity/interface'
 class Repository {
     constructor(private logger: Logger) {}
 
-    public async Fetch({ offset, limit, keyword, category }: RequestParams) {
+    public async Fetch({
+        offset,
+        limit,
+        keyword,
+        category,
+        sort_order,
+        sort_by,
+    }: RequestParams) {
         const filter = {}
+        const sort = {}
 
         if (keyword)
             Object.assign(filter, {
@@ -21,7 +29,17 @@ class Repository {
                 category: category,
             })
 
-        const data = await imageSchema.find(filter).skip(offset).limit(limit)
+        if (['created_at'].includes(sort_order)) {
+            Object.assign(sort, {
+                sort_order: sort_by,
+            })
+        }
+
+        const data = await imageSchema
+            .find(filter)
+            .sort(sort)
+            .skip(offset)
+            .limit(limit)
         const count = await imageSchema.find(filter).count()
 
         return {

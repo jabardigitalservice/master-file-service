@@ -14,9 +14,7 @@ const file = Joi.object({
 
 export const Store = Joi.object({
     caption: Joi.string().regex(RegexSanitize).optional(),
-    category: Joi.string()
-        .alphanum()
-        .required(),
+    category: Joi.string().alphanum().required(),
     tags: Joi.array()
         .items(Joi.string().alphanum())
         .optional()
