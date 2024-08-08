@@ -1,7 +1,6 @@
 import Joi from 'joi'
 import config from '../../../config/config'
 import { RegexSanitize } from '../../../helpers/regex'
-import { categories } from '../../../database/constant/image'
 
 const file = Joi.object({
     path: Joi.string().required(),
@@ -16,7 +15,7 @@ const file = Joi.object({
 export const Store = Joi.object({
     caption: Joi.string().regex(RegexSanitize).optional(),
     category: Joi.string()
-        .valid(...categories)
+        .alphanum()
         .required(),
     tags: Joi.array()
         .items(Joi.string().alphanum())
