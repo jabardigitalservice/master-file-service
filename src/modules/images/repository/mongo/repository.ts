@@ -29,9 +29,9 @@ class Repository {
                 category: category,
             })
 
-        if (['created_at'].includes(sort_order)) {
+        if (['created_at'].includes(sort_by)) {
             Object.assign(sort, {
-                sort_order: sort_by,
+                [sort_by]: sort_order,
             })
         }
 
