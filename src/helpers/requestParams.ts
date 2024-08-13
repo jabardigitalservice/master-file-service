@@ -14,9 +14,10 @@ export const GetRequestParams = (query: Record<string, any>): RequestParams => {
     const offset = limit * (page - 1)
     let { q, sort_order, sort_by } = query
 
-    if (!['ASC', 'DESC'].includes(sort_order)) {
-        sort_order = 'ASC'
+    if (!/asc|desc/i.test(sort_order)) {
+        sort_order = 'asc'
     }
+
 
     return {
         ...query,
