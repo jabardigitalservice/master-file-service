@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { RequestParams } from '../../../helpers/requestParams'
 import Logger from '../../../pkg/logger'
-import { File, Store } from '../entity/interface'
+import { File, Search, Store } from '../entity/interface'
 import Repository from '../repository/mongo/repository'
 import S3 from '../../../external/s3'
 import { CustomPathFile } from '../../../helpers/file'
@@ -11,6 +11,8 @@ import {
     RegexExtensionImage,
 } from '../../../helpers/regex'
 import FileGenerator from '../../../external/fileGenerator'
+import statusCode from '../../../pkg/statusCode'
+import error from '../../../pkg/error'
 
 class Usecase {
     constructor(
@@ -92,6 +94,13 @@ class Usecase {
         } catch (error: any) {
             this.logger.Error(error.message)
         }
+    }
+
+    public async Search({ filename, category }: Search) {
+        const path = `${category}/${filename}`
+        const result = await this.repository.FindByPath(path)
+
+        return !!result
     }
 }
 

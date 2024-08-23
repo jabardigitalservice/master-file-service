@@ -29,3 +29,8 @@ export const Store = Joi.object({
     }),
     file,
 })
+
+export const Search = Joi.object({
+    category: Joi.string().alphanum().required(),
+    filename: Joi.string().regex(RegexSanitize).required(),
+})

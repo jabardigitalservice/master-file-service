@@ -38,6 +38,7 @@ class Images {
         const Router = this.http.Router()
 
         Router.post('/', this.http.Upload('file'), handler.Store())
+        Router.get('/', handler.Search())
 
         this.http.SetRouter('/v1/images', Router)
     }

@@ -15,3 +15,8 @@ export interface File {
     filename: string
     uri?: string
 }
+
+export type Search = {
+    category: string
+    filename: string
+}
