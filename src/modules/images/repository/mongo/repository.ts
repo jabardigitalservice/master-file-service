@@ -53,6 +53,16 @@ class Repository {
 
         return schemaNew.save()
     }
+
+    public async UpdateSize(id: string, size: number) {
+        return imageSchema.findByIdAndUpdate(id, {
+            'file.size': size,
+        })
+    }
+
+    public async FindByPath(path: string) {
+        return imageSchema.findOne({ 'file.path': path }).exec()
+    }
 }
 
 export default Repository

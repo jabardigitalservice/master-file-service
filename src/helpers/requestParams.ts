@@ -18,7 +18,6 @@ export const GetRequestParams = (query: Record<string, any>): RequestParams => {
         sort_order = 'asc'
     }
 
-
     return {
         ...query,
         page,

@@ -44,6 +44,9 @@ const config: Config = {
         bucket: env.AWS_BUCKET,
         region: env.AWS_REGION,
     },
+    generator_file: {
+        url: env.GENERATOR_FILE_URL,
+    },
 }
 
 export default config

@@ -23,6 +23,9 @@ class Handler {
             category: req.body.category,
             tags: req.body.tags,
             file: req.file || {},
+            compression: req.body.compression,
+            quality: req.body.quality,
+            convertTo: req.body.convertTo,
         })
     }
 

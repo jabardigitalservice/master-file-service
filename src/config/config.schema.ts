@@ -11,8 +11,8 @@ export default Joi.object({
     FILE_URI: Joi.string().uri().optional(),
     FILE_TYPE: Joi.string()
         .optional()
-        .default('image/jpg,image/png,image/jpeg,image/svg+xml'),
-    FILE_MAX: Joi.number().optional().default(10),
+        .default('image/jpg,image/png,image/jpeg,image/svg+xml,image/webp'),
+    FILE_MAX: Joi.number().optional().default(50),
     DB_HOST: Joi.string().required(),
     DB_PORT: Joi.number().required(),
     DB_USERNAME: Joi.string().required(),
@@ -25,4 +25,5 @@ export default Joi.object({
     AWS_REGION: Joi.string().optional(),
     JWT_ACCESS_SECRET: Joi.string().required(),
     JWT_ALGORITHM: Joi.string().default('HS256'),
+    GENERATOR_FILE_URL: Joi.string().uri().optional(),
 })

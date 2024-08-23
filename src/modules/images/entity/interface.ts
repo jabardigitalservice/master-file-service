@@ -1,10 +1,10 @@
 export interface Store {
     file: File
-    caption: string
     title: string
-    description: string
     category: string
-    tags: string[]
+    compression: boolean
+    quality: number
+    convertTo: string
 }
 
 export interface File {

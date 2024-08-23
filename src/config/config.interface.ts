@@ -36,4 +36,7 @@ export interface Config {
         bucket: string
         region: string
     }
+    generator_file: {
+        url: string
+    }
 }

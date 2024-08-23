@@ -13,14 +13,19 @@ const file = Joi.object({
 })
 
 export const Store = Joi.object({
-    caption: Joi.string().regex(RegexSanitize).optional(),
     category: Joi.string().alphanum().required(),
-    tags: Joi.array()
-        .items(Joi.string().alphanum())
-        .optional()
-        .default([])
-        .unique((a, b) => a == b, { ignoreUndefined: true }),
     title: Joi.string().regex(RegexSanitize).optional().default(null),
     description: Joi.string().regex(RegexSanitize).optional().default(null),
+    compression: Joi.boolean().optional().default(false),
+    quality: Joi.number().min(1).max(100).when('compression', {
+        is: true,
+        then: Joi.required(),
+        otherwise: Joi.optional(),
+    }),
+    convertTo: Joi.string().valid('jpeg', 'webp').when('compression', {
+        is: true,
+        then: Joi.required(),
+        otherwise: Joi.optional(),
+    }),
     file,
 })
