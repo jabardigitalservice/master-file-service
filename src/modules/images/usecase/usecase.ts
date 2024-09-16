@@ -11,8 +11,6 @@ import {
     RegexExtensionImage,
 } from '../../../helpers/regex'
 import FileGenerator from '../../../external/fileGenerator'
-import statusCode from '../../../pkg/statusCode'
-import error from '../../../pkg/error'
 
 class Usecase {
     constructor(
