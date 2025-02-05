@@ -13,7 +13,7 @@ const file = Joi.object({
 })
 
 export const Store = Joi.object({
-    category: Joi.string().alphanum().required(),
+    category: Joi.string().required(),
     title: Joi.string().regex(RegexSanitize).optional().default(null),
     description: Joi.string().regex(RegexSanitize).optional().default(null),
     compression: Joi.boolean().optional().default(false),
