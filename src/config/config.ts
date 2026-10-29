@@ -38,11 +38,12 @@ const config: Config = {
         type: env.FILE_TYPE.split(','),
         uri: env.FILE_URI,
     },
-    aws: {
-        access_key_id: env.AWS_ACCESS_KEY_ID,
-        secret_access_key: env.AWS_SECRET_ACCESS_KEY,
-        bucket: env.AWS_BUCKET,
-        region: env.AWS_REGION,
+    gcp: {
+        access_key_id: env.GCP_ACCESS_KEY_ID,
+        secret_access_key: env.GCP_SECRET_ACCESS_KEY,
+        bucket: env.GCP_BUCKET,
+        region: env.GCP_REGION,
+        endpoint: env.GCP_ENDPOINT,
     },
     generator_file: {
         url: env.GENERATOR_FILE_URL,

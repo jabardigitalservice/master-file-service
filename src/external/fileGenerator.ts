@@ -1,13 +1,13 @@
 import axios from 'axios'
 import { Config } from '../config/config.interface'
 import Logger from '../pkg/logger'
-import S3 from './s3'
+import GCS from './gcs'
 import error from '../pkg/error'
 
 class FileGenerator {
     constructor(
         private config: Config,
-        private s3: S3,
+        private gcs: GCS,
         private logger: Logger
     ) {}
 
@@ -30,7 +30,7 @@ class FileGenerator {
 
             const contentType = headers['content-type'] || ''
 
-            await this.s3.Upload(data, path, contentType)
+            await this.gcs.Upload(data, path, contentType)
             this.logger.Info('process compress image success', {
                 category: 'compress-image',
             })

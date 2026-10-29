@@ -3,7 +3,7 @@ import { RequestParams } from '../../../helpers/requestParams'
 import Logger from '../../../pkg/logger'
 import { File, Search, Store } from '../entity/interface'
 import Repository from '../repository/mongo/repository'
-import S3 from '../../../external/s3'
+import GCS from '../../../external/gcs'
 import { CustomPathFile } from '../../../helpers/file'
 import { getSlug } from '../../../helpers/slug'
 import {
@@ -16,7 +16,7 @@ class Usecase {
     constructor(
         private logger: Logger,
         private repository: Repository,
-        private s3: S3,
+        private gcs: GCS,
         private fileGenerator: FileGenerator
     ) {}
 
@@ -41,7 +41,7 @@ class Usecase {
         const newPath = CustomPathFile(category, body.file)
         const source = readFileSync(body.file.path)
 
-        await this.s3.Upload(source, newPath, body.file.mimetype)
+        await this.gcs.Upload(source, newPath, body.file.mimetype)
         body.file.path = newPath
 
         const existImage = await this.repository.FindByPath(newPath)
