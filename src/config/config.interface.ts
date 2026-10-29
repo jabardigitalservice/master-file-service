@@ -30,11 +30,12 @@ export interface Config {
         type: string[]
         uri: string
     }
-    aws: {
+    gcp: {
         access_key_id: string
         secret_access_key: string
         bucket: string
         region: string
+        endpoint: string
     }
     generator_file: {
         url: string

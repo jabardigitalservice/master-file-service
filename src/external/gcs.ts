@@ -2,19 +2,20 @@ import {
     S3Client,
     PutObjectCommand,
     DeleteObjectCommand,
-    DeleteObjectsCommand,
 } from '@aws-sdk/client-s3'
 import { Config } from '../config/config.interface'
 import error from '../pkg/error'
 
-class S3 {
+// Google Cloud Storage through its S3-compatible XML API, authenticated with an HMAC key
+class GCS {
     private client: S3Client
     constructor(private config: Config) {
         this.client = new S3Client({
-            region: config.aws.region,
+            region: config.gcp.region,
+            endpoint: config.gcp.endpoint,
             credentials: {
-                accessKeyId: config.aws.access_key_id,
-                secretAccessKey: config.aws.secret_access_key,
+                accessKeyId: config.gcp.access_key_id,
+                secretAccessKey: config.gcp.secret_access_key,
             },
         })
     }
@@ -22,7 +23,7 @@ class S3 {
     public async Upload(source: Buffer, path: string, ContentType: string) {
         try {
             const params = {
-                Bucket: this.config.aws.bucket,
+                Bucket: this.config.gcp.bucket,
                 Key: path,
                 Body: source,
                 ContentType,
@@ -41,7 +42,7 @@ class S3 {
     public async Delete(path: string) {
         try {
             const command = new DeleteObjectCommand({
-                Bucket: this.config.aws.bucket,
+                Bucket: this.config.gcp.bucket,
                 Key: path,
             })
             const result = await this.client.send(command)
@@ -52,17 +53,19 @@ class S3 {
         }
     }
 
+    // GCS does not support the S3 multi-object delete API, so objects are deleted one by one
     public async Deletes(paths: string[]) {
         try {
-            const command = new DeleteObjectsCommand({
-                Bucket: this.config.aws.bucket,
-                Delete: {
-                    Objects: paths.map((Key) => {
-                        return { Key }
-                    }),
-                },
-            })
-            const result = await this.client.send(command)
+            const result = await Promise.all(
+                paths.map((Key) =>
+                    this.client.send(
+                        new DeleteObjectCommand({
+                            Bucket: this.config.gcp.bucket,
+                            Key,
+                        })
+                    )
+                )
+            )
             return result
         } catch (err: any) {
             const code = err.$metadata.httpStatusCode as number
@@ -71,4 +74,4 @@ class S3 {
     }
 }
 
-export default S3
+export default GCS

@@ -4,7 +4,7 @@ import Usecase from './usecase/usecase'
 import Handler from './delivery/http/handler'
 import Repository from './repository/mongo/repository'
 import { Config } from '../../config/config.interface'
-import S3 from '../../external/s3'
+import GCS from '../../external/gcs'
 import FileGenerator from '../../external/fileGenerator'
 
 class Images {
@@ -13,10 +13,10 @@ class Images {
         private http: Http,
         private config: Config
     ) {
-        const s3 = new S3(config)
-        const fileGenerator = new FileGenerator(config, s3, logger)
+        const gcs = new GCS(config)
+        const fileGenerator = new FileGenerator(config, gcs, logger)
         const repository = new Repository(logger)
-        const usecase = new Usecase(logger, repository, s3, fileGenerator)
+        const usecase = new Usecase(logger, repository, gcs, fileGenerator)
         this.loadHttp(usecase)
     }
 
